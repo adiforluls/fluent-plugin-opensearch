@@ -159,13 +159,11 @@ module Fluent::Plugin
                end
         data_stream_name = extract_placeholders(@data_stream_name, chunk)
         data_stream_template_name = extract_placeholders(@data_stream_template_name, chunk)
-        unless @data_stream_names.include?(data_stream_name)
-          begin
-            create_index_template(data_stream_name, data_stream_template_name, host)
-            @data_stream_names << data_stream_name
-          rescue => e
-            raise Fluent::ConfigError, "Failed to create data stream: <#{data_stream_name}> #{e.message}"
-          end
+        begin
+          create_index_template(data_stream_name, data_stream_template_name, host)
+          @data_stream_names << data_stream_name
+        rescue => e
+          raise Fluent::ConfigError, "Failed to create data stream: <#{data_stream_name}> #{e.message}"
         end
       end
 
