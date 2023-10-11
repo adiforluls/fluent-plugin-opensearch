@@ -162,11 +162,12 @@ module Fluent::Plugin
                end
         data_stream_name = extract_placeholders(@data_stream_name, chunk).downcase
         data_stream_template_name = extract_placeholders(@data_stream_template_name, chunk).downcase
-        begin
-          create_index_template(data_stream_name, data_stream_template_name, host)
-        rescue => e
-          raise Fluent::ConfigError, "Failed to create data stream: <#{data_stream_name}> #{e.message}"
-        end
+      end
+
+      begin
+        create_index_template(data_stream_name, data_stream_template_name, host)
+      rescue => e
+        raise RecoverableRequestFailure, "Failed to create data stream: <#{data_stream_name}> #{e.message}"
       end
 
       bulk_message = ""
